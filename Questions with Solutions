@@ -61,5 +61,20 @@ from insurance i
   join admissions a on i.patient_id = a.patient_id
 group by has_insurance
 
+4. Show the provinces that has more patients identified as 'M' than 'F'. Must only show full province_name
 
+Solution:
+
+Select province_name
+From (
+    Select    
+      pn.province_name,
+      sum(CASE when gender = 'M' then 1 else 0 end) male_count,
+      sum(case when gender = 'F' then 1 else 0 end) female_count
+    from patients p
+      join province_names pn on p.province_id = pn.province_id
+    group by
+      pn.province_name
+  )
+ where male_count > female_count
 
