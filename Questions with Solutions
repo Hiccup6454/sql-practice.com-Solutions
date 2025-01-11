@@ -103,3 +103,43 @@ where
       patient_id % 2 != 0
   )
   and city = 'Kingston'
+
+6. Sort the province names in ascending order in such a way that the province 'Ontario' is always on top.
+
+Solution:
+
+Select province_name
+from (
+    select
+      province_name,
+      case
+        when province_name = 'Ontario' then 0
+        else 1
+      end as province_sort
+    from province_names
+  )
+order by
+  province_sort,
+  province_name
+
+7. We need a breakdown for the total amount of admissions each doctor has started each year. Show the doctor_id, doctor_full_name, specialty, year, 
+total_admissions for that year.
+
+Solution:
+
+select
+  doctor_id,
+  concat(first_name, " ", last_name) as doctor_name,
+  specialty,
+  year(admission_date) as selected_year,
+  count(patient_id) as total_admission
+from admissions a
+  join doctors d on a.attending_doctor_id = d.doctor_id
+group by
+  selected_year,
+  doctor_id,
+  doctor_name,
+  specialty
+
+
+
